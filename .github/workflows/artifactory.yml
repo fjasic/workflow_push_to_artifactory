@@ -25,7 +25,7 @@ jobs:
       - name: publish to artifactory
         uses: advancedcsg-open/action-jfrog-cli@master
         with:
-          url: 'https://company.jfrog.io/'
+          url: 'https://filipjasic.jfrog.io/'
           credentials type: 'accesstoken'
-          apiaccess token: ${{ secrets.JF_ACCESS_TOKEN }}
+          access token: ${{ secrets.JF_ACCESS_TOKEN }}
           args: u "dist/*" "default-pypi-local" --build-name=myawesomeapp
