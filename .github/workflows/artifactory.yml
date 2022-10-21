@@ -13,19 +13,17 @@ jobs:
       - uses: actions/setup-python@v4
         with:
           python-version: '3.10'
-      # - name: install packages
-      #   run: |
-      #     pip install wheel
-      #     pip install setuptools
-      - uses: jfrog/setup-jfrog-cli@v3
-        with:
-          version: latest
-        env:
-          JF_ACCESS_TOKEN: ${{ secrets.JF_ACCESS_TOKEN }}
-      - name: publish to artifactory
-        uses: advancedcsg-open/action-jfrog-cli@master
-        with:
-          url: 'https://filipjasic.jfrog.io/'
-          credentials type: 'accesstoken'
-          access token: ${{ secrets.JF_ACCESS_TOKEN }}
-          args: u "dist/*" "default-pypi-local" --build-name=myawesomeapp
+      - name: install packages
+        run: |
+          pip install wheel
+          pip install setuptools
+      - name: build
+        run: |
+          python setup.py sdist bdist_wheel
+      - name: Setup .pypirc
+        run: |
+          pip config --user set local.repository https://filipjasic.jfrog.io/artifactory/api/pypi/default-pypi
+          pip config --user set local.repository ${{ secrets.email }}
+          pip config --user set local.password ${{ secrets.password }}
+      - name: Deploy package to Artifactory
+        run: python setup.py bdist_wheel upload -r local

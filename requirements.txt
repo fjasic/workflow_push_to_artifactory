@@ -1,2 +1,2 @@
-setuptools
-wheel
+PyYAML>3.11
+nltk
