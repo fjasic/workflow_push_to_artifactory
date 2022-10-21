@@ -1,0 +1,32 @@
+name: Deploy to Artifactory on tag
+
+on:
+  push:
+    tags:
+      - "*"
+
+jobs:
+  artifactory_deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+          cache: 'pip' # caching pip dependencies
+      - name: install packages
+        run: |
+          pip install wheel
+          pip install setuptools
+      - uses: jfrog/setup-jfrog-cli@v3
+        with:
+          version: latest
+        env:
+          JF_ACCESS_TOKEN: ${{ secrets.JF_ACCESS_TOKEN }}
+      - name: publish to artifactory
+        uses: advancedcsg-open/action-jfrog-cli@master
+        with:
+          url: 'https://company.jfrog.io/'
+          credentials type: 'accesstoken'
+          apiaccess token: ${{ secrets.JF_ACCESS_TOKEN }}
+          args: u "dist/*" "default-pypi-local" --build-name=myawesomeapp
