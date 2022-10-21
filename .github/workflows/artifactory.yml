@@ -27,9 +27,5 @@ jobs:
           pip config --user set local.repository https://filipjasic.jfrog.io/artifactory/api/pypi/default-pypi
           pip config --user set local.username ${{ secrets.EMAIL }}
           pip config --user set local.password ${{ secrets.PASSWORD }}
-      - name: See .pypirc
-        run: |
-          cat ~/.pypirc
-          cay ~/pip.conf
       - name: Deploy package to Artifactory
-        run: twine upload -r local dist/* --config-file ~/.pypirc
+        run: twine upload -r local dist/* --config-file $HOME/.config/pip/pip.conf
