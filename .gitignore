@@ -1,1 +1,4 @@
 .github/workflows/postojeci.yml
+/jfrog_python_example.egg-info
+/dist
+/build
